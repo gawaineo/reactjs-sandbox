@@ -8,7 +8,6 @@
 <body>
   <div id="app">
     <!-- my app renders here -->
-
   </div>
 
 
@@ -20,15 +19,49 @@
   <script src="react/build/react-dom.js"></script>
   <script>
 
+    // var Component = React.createClass({
+    //   propTypes: { name: React.PropTypes.string.isRequired },
+    //
+    //   render: function() {
+    //     return React.DOM.span(null, "My name is " + this.props.name);
+    //   }
+    // });
+
+    var TextAreaCounter = React.createClass({
+      propTypes: {
+        text: React.PropTypes.string
+      },
+
+      getInitialState: function() {
+        return {
+          text: this.props.defaultValue,
+        };
+      },
+
+      render: function() {
+        return React.DOM.div(null,
+          React.DOM.textarea({
+            value: this.state.text,
+            onChange: this._textChange
+          }),
+          React.DOM.h3(null, this.state.text.length)
+        );
+      },
+
+      _textChange: function(ev) {
+        this.setState({
+          text: ev.target.value
+        });
+      }
+
+    });
+
     React.render(
-      React.DOM.h1(
-        {id: "my-heading"},
-        React.DOM.span(null,
-          React.DOM.em(null, "Hell"),
-        "o"),
-      " world!"),
+      React.createElement(TextAreaCounter,
+        {text: "hi"}),
       document.getElementById("app")
     );
+
   </script>
 </body>
 
