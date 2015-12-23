@@ -13,29 +13,35 @@
 
 
 
-
-
   <script src="react/build/react.js"></script>
   <script src="react/build/react-dom.js"></script>
   <script>
 
-    // var Component = React.createClass({
-    //   propTypes: { name: React.PropTypes.string.isRequired },
-    //
-    //   render: function() {
-    //     return React.DOM.span(null, "My name is " + this.props.name);
-    //   }
-    // });
+    var logMixin = {
+      _log: function(methodName, args) {
+        console.log(this.name + '::' + methodName, args);
+      },
+      componentWillReceiveProps: function(newProps) {
+        this.setState({
+          text: newProps.defaultValue
+        });
+      },
+      componentWillUpdate: function() {this._log('componentWillUpdate', arguments);},
+      componentDidUpdate:  function(oldProps, oldState) {
+        this._log('componentDidUpdate',  arguments);
+        if (this.state.text.length > 20){
+          this.replaceState(oldState);
+        }
+      },
+      componentDidMount:   function() {this._log('componentDidMount',   arguments);},
+      componentWillMount:  function() {this._log('componentWillMount',  arguments);}
+    };
 
     var TextAreaCounter = React.createClass({
+      name: 'TextAreaCounter',
+      mixins: [logMixin],
       propTypes: {
-        text: React.PropTypes.string
-      },
-
-      getInitialState: function() {
-        return {
-          text: this.props.defaultValue,
-        };
+        defaultValue: React.PropTypes.string
       },
 
       render: function() {
@@ -52,13 +58,18 @@
         this.setState({
           text: ev.target.value
         });
-      }
+      },
 
+      getInitialState: function() {
+        return {
+          text: this.props.defaultValue,
+        };
+      }
     });
 
     React.render(
       React.createElement(TextAreaCounter,
-        {text: "hi"}),
+        {defaultValue: "Bob"}),
       document.getElementById("app")
     );
 
