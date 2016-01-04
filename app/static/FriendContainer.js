@@ -25,11 +25,26 @@ var HelloUser = React.createClass({
 
 var FriendsContainer =  React.createClass({
   getInitialState: function (){
+    alert('In getInitialState')
     return {
       name: 'Bruce Wayne',
-      friends: ['Clark Kent', 'Oliver Queen', 'Barry Allen']
+      friends: ['Clark Kent', 'Oliver Queen', 'Barry Allen', 'Eddy Murphy', 'Chris Rock']
     }
   },
+
+  componentWillMount: function(){
+    alert('In Component Will Mount')
+  },
+
+  componentDidMount: function(){
+    alert('In Component Did Mount')
+  },
+
+  componentWillReceiveProps: function(nextProps){
+    alert('In Component Will Receive Props')
+  },
+
+  componentWillUnmount: function(){},
 
   addFriend: function(friend) {
     this.setState({
@@ -53,6 +68,9 @@ var AddFriend = React.createClass({
     return {
       newFriend: ''
     }
+  },
+  propTypes: {
+    addNew: React.PropTypes.func.isRequired
   },
   handleAddNew: function() {
     this.props.addNew(this.state.newFriend);
@@ -78,6 +96,11 @@ var AddFriend = React.createClass({
 
 
 var ShowList = React.createClass({
+  getDefaultProps: function(){
+    return {
+      names : []
+    }
+  },
   render: function () {
     var listItems = this.props.names.map(function(friend){
       return <li> {friend} </li>;
